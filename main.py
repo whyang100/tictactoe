@@ -12,6 +12,7 @@ BOARD_SIZE = 3  # 기본 보드 크기
 board = [["" for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 scores = {"X": 0, "O": 0}  # X와 O의 점수 기록
 player_names = {"X": "플레이어 1", "O": "플레이어 2"}  # 플레이어 이름 기록
+theme = {"dark_mode": False}  # 기본 테마는 밝은 모드
 
 def click_button(row, col):
     global current_player
@@ -76,6 +77,28 @@ def set_player_names():
         player_names["O"] = player_2
     messagebox.showinfo("이름 설정 완료", f"플레이어 1: {player_names['X']}, 플레이어 2: {player_names['O']}")
 
+def toggle_theme():
+    global theme
+    theme["dark_mode"] = not theme["dark_mode"]  # 테마 상태 전환
+    if theme["dark_mode"]:
+        root.configure(bg="black")
+        for r in range(BOARD_SIZE):
+            for c in range(BOARD_SIZE):
+                buttons[r][c].configure(bg="gray", fg="white")
+        reset_btn.configure(bg="gray", fg="white")
+        reset_score_btn.configure(bg="gray", fg="white")
+        back_btn.configure(bg="gray", fg="white")
+        messagebox.showinfo("테마 변경", "다크 모드가 활성화되었습니다.")
+    else:
+        root.configure(bg="white")
+        for r in range(BOARD_SIZE):
+            for c in range(BOARD_SIZE):
+                buttons[r][c].configure(bg="lightblue", fg="black")
+        reset_btn.configure(bg="lightblue", fg="black")
+        reset_score_btn.configure(bg="lightblue", fg="black")
+        back_btn.configure(bg="lightblue", fg="black")
+        messagebox.showinfo("테마 변경", "밝은 모드가 활성화되었습니다.")
+
 def check_winner(player):
     for row in board:
         if all(cell == player for cell in row):
@@ -109,6 +132,8 @@ def create_game_board():
                                       bg="lightblue", command=lambda row=r, col=c: click_button(row, col))
             buttons[r][c].grid(row=r, column=c)
 
+    global reset_btn, reset_score_btn, back_btn
+
     reset_btn = tk.Button(root, text="게임 리셋", font=("Arial", 14), command=reset_board)
     reset_btn.grid(row=BOARD_SIZE, column=0, columnspan=BOARD_SIZE)
 
@@ -117,6 +142,10 @@ def create_game_board():
 
     back_btn = tk.Button(root, text="뒤로가기", font=("Arial", 14), command=go_back)
     back_btn.grid(row=BOARD_SIZE + 2, column=0, columnspan=BOARD_SIZE)
+
+    # 다크 테마 버튼 추가
+    theme_btn = tk.Button(root, text="다크 모드 전환", font=("Arial", 14), command=toggle_theme)
+    theme_btn.grid(row=BOARD_SIZE + 3, column=0, columnspan=BOARD_SIZE)
 
     # 초기 점수 표시
     messagebox.showinfo("현재 점수", f"{player_names['X']} = {scores['X']}, {player_names['O']} = {scores['O']}")
@@ -127,6 +156,9 @@ def create_size_selection():
     tk.Button(root, text="3x3 보드", font=("Arial", 14), command=lambda: select_board_size(3)).pack(pady=5)
     tk.Button(root, text="4x4 보드", font=("Arial", 14), command=lambda: select_board_size(4)).pack(pady=5)
     tk.Button(root, text="5x5 보드", font=("Arial", 14), command=lambda: select_board_size(5)).pack(pady=5)
+
+    # 다크 테마 버튼 추가
+    tk.Button(root, text="다크 모드 전환", font=("Arial", 14), command=toggle_theme).pack(pady=5)
 
 create_size_selection()
 root.mainloop()
