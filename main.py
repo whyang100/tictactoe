@@ -52,3 +52,9 @@ for r in range(3):
         buttons[r][c] = tk.Button(root, text="", font=("Arial", 20), height=2, width=5,
                                   command=lambda row=r, col=c: click_button(row, col))
         buttons[r][c].grid(row=r, column=c)
+def add_reset_button():
+    reset_btn = tk.Button(root, text="게임 리셋", font=("Arial", 14), command=reset_board)
+    reset_btn.grid(row=3, column=0, columnspan=3)
+
+# 게임 리셋 버튼 추가
+add_reset_button()
