@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.simpledialog import askstring  # 이름 설정을 위해 추가
 import random  # AI를 위한 랜덤 선택
 
 root = tk.Tk()
@@ -10,6 +11,7 @@ current_player = "X"
 BOARD_SIZE = 3  # 기본 보드 크기
 board = [["" for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 scores = {"X": 0, "O": 0}  # X와 O의 점수 기록
+player_names = {"X": "플레이어 1", "O": "플레이어 2"}  # 플레이어 이름 기록
 
 def click_button(row, col):
     global current_player
@@ -20,7 +22,7 @@ def click_button(row, col):
             scores[current_player] += 1  # 점수 업데이트
             messagebox.showinfo(
                 "게임 종료", 
-                f"플레이어 {current_player} 승리!\n점수: X = {scores['X']}, O = {scores['O']}"
+                f"{player_names[current_player]} 승리!\n점수: {player_names['X']} = {scores['X']}, {player_names['O']} = {scores['O']}"
             )
             reset_board()
         elif all(board[r][c] != "" for r in range(BOARD_SIZE) for c in range(BOARD_SIZE)):
@@ -42,7 +44,7 @@ def ai_move():
             scores[current_player] += 1  # 점수 업데이트
             messagebox.showinfo(
                 "게임 종료", 
-                f"플레이어 {current_player} 승리!\n점수: X = {scores['X']}, O = {scores['O']}"
+                f"{player_names[current_player]} 승리!\n점수: {player_names['X']} = {scores['X']}, {player_names['O']} = {scores['O']}"
             )
             reset_board()
         elif all(board[r][c] != "" for r in range(BOARD_SIZE) for c in range(BOARD_SIZE)):
@@ -63,6 +65,16 @@ def reset_scores():
     global scores
     scores = {"X": 0, "O": 0}  # 점수 초기화
     messagebox.showinfo("점수 초기화", "점수가 초기화되었습니다.")
+
+def set_player_names():
+    global player_names
+    player_1 = askstring("플레이어 이름 설정", "플레이어 1의 이름을 입력하세요:")
+    player_2 = askstring("플레이어 이름 설정", "플레이어 2의 이름을 입력하세요:")
+    if player_1:
+        player_names["X"] = player_1
+    if player_2:
+        player_names["O"] = player_2
+    messagebox.showinfo("이름 설정 완료", f"플레이어 1: {player_names['X']}, 플레이어 2: {player_names['O']}")
 
 def check_winner(player):
     for row in board:
@@ -107,10 +119,11 @@ def create_game_board():
     back_btn.grid(row=BOARD_SIZE + 2, column=0, columnspan=BOARD_SIZE)
 
     # 초기 점수 표시
-    messagebox.showinfo("현재 점수", f"X = {scores['X']}, O = {scores['O']}")
+    messagebox.showinfo("현재 점수", f"{player_names['X']} = {scores['X']}, {player_names['O']} = {scores['O']}")
 
 def create_size_selection():
     tk.Label(root, text="보드 크기를 선택하세요", font=("Arial", 16)).pack(pady=10)
+    tk.Button(root, text="플레이어 이름 설정", font=("Arial", 14), command=set_player_names).pack(pady=5)
     tk.Button(root, text="3x3 보드", font=("Arial", 14), command=lambda: select_board_size(3)).pack(pady=5)
     tk.Button(root, text="4x4 보드", font=("Arial", 14), command=lambda: select_board_size(4)).pack(pady=5)
     tk.Button(root, text="5x5 보드", font=("Arial", 14), command=lambda: select_board_size(5)).pack(pady=5)
