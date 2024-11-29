@@ -58,3 +58,5 @@ def add_reset_button():
 
 # 게임 리셋 버튼 추가
 add_reset_button()
+buttons[r][c] = tk.Button(root, text="", font=("Arial", 20), height=2, width=5,
+                          bg="lightblue", command=lambda row=r, col=c: click_button(row, col))
