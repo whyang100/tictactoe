@@ -106,6 +106,9 @@ def create_game_board():
     back_btn = tk.Button(root, text="뒤로가기", font=("Arial", 14), command=go_back)
     back_btn.grid(row=BOARD_SIZE + 2, column=0, columnspan=BOARD_SIZE)
 
+    # 초기 점수 표시
+    messagebox.showinfo("현재 점수", f"X = {scores['X']}, O = {scores['O']}")
+
 def create_size_selection():
     tk.Label(root, text="보드 크기를 선택하세요", font=("Arial", 16)).pack(pady=10)
     tk.Button(root, text="3x3 보드", font=("Arial", 14), command=lambda: select_board_size(3)).pack(pady=5)
